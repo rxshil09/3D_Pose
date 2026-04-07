@@ -2,15 +2,18 @@ import { Play, Pause, SkipBack, SkipForward, Maximize2, Minimize2, Box } from "l
 import { useState, lazy, Suspense, useEffect } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
+import { Link } from "react-router-dom";
+import { Upload } from "lucide-react";
 
 const Skeleton3DViewer = lazy(() => import("./Skeleton3DViewer"));
 
 interface VideoPanelProps {
   title: string;
   isPoseView?: boolean;
+  showUploadCta?: boolean;
 }
 
-const VideoPanel = ({ title, isPoseView }: VideoPanelProps) => {
+const VideoPanel = ({ title, isPoseView, showUploadCta }: VideoPanelProps) => {
   const [playing, setPlaying] = useState(false);
   const [frame, setFrame] = useState([142]);
   const [showJoints, setShowJoints] = useState(true);
@@ -107,10 +110,22 @@ const VideoPanel = ({ title, isPoseView }: VideoPanelProps) => {
             </div>
           )
         ) : (
-          <div className="flex flex-col items-center gap-2 text-muted-foreground">
-            <Play className="w-8 h-8 sm:w-10 sm:h-10 opacity-30" />
-            <span className="text-xs">No video loaded</span>
-          </div>
+          showUploadCta ? (
+            <Link
+              to="/upload"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+              aria-label="Upload video"
+              title="Upload video"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Upload Video</span>
+            </Link>
+          ) : (
+            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+              <Play className="w-8 h-8 sm:w-10 sm:h-10 opacity-30" />
+              <span className="text-xs">No video loaded</span>
+            </div>
+          )
         )}
       </div>
 
